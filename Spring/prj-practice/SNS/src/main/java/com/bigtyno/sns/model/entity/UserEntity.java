@@ -1,24 +1,62 @@
 package com.bigtyno.sns.model.entity;
 
-import jdk.jfr.Enabled;
+import com.bigtyno.sns.model.UserRole;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.sql.Timestamp;
+import java.time.Instant;
 
-@Enabled
-@Table
-@Getter
+
 @Setter
+@Getter
+@Entity
+@Table(name = "\"user\"")
+@SQLDelete(sql = "UPDATE \"user\" SET removed_at = NOW() WHERE id=?")
+@Where(clause = "removed_at is NULL")
+@NoArgsConstructor
 public class UserEntity {
 
     @Id
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id = null;
 
-    @Column(name = "user_name")
+    @Column(name = "user_name", unique = true)
     private String userName;
-    @Column(name = "user_password")
+
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole role = UserRole.USER;
+
+    @Column(name = "registered_at")
+    private Timestamp registeredAt;
+
+    @Column(name = "updated_at")
+    private Timestamp updatedAt;
+
+    @Column(name = "removed_at")
+    private Timestamp removedAt;
+
+
+    @PrePersist
+    void registeredAt() {
+        this.registeredAt = Timestamp.from(Instant.now());
+    }
+
+    @PreUpdate
+    void updatedAt() {
+        this.updatedAt = Timestamp.from(Instant.now());
+    }
+
+    public static UserEntity of(String userName, String encodedPwd) {
+        UserEntity entity = new UserEntity();
+        entity.setUserName(userName);
+        entity.setPassword(encodedPwd);
+        return entity;
+    }
 }

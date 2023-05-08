@@ -1,6 +1,7 @@
 package com.bigtyno.sns.controller;
 
 import com.bigtyno.sns.controller.request.UserJoinRequest;
+import com.bigtyno.sns.exception.ErrorCode;
 import com.bigtyno.sns.exception.SnsApplicationException;
 import com.bigtyno.sns.model.User;
 import com.bigtyno.sns.service.UserService;
@@ -55,7 +56,7 @@ public class UserController {
         String userName = "userName";
         String password = "password";
 
-        when(userService.join(userName, password)).thenThrow(new SnsApplicationException());
+        when(userService.join(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME,""));
 
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -71,7 +72,7 @@ public class UserController {
         String userName = "userName";
         String password = "password";
 
-        when(userService.login(userName,password)).thenThrow(new SnsApplicationException());
+        when(userService.login(userName,password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME,""));
 
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -87,7 +88,7 @@ public class UserController {
         String userName = "userName";
         String password = "password";
 
-        when(userService.login(userName,password)).thenThrow(new SnsApplicationException());
+        when(userService.login(userName,password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME,""));
 
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)

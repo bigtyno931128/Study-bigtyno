@@ -21,6 +21,6 @@ public class GlobalControllerAdvice {
     public ResponseEntity<?> applicationHandler(RuntimeException e) {
         log.error("Error occurs {}", e.toString());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Response.error(ErrorCode.INTERNAL_SERVER_ERROR.name()));
+                .body(Response.error(ErrorCode.DATABASE_ERROR.name()));
     }
 }

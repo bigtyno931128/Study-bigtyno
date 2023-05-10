@@ -88,7 +88,7 @@ public class UserController {
         String userName = "userName";
         String password = "password";
 
-        when(userService.login(userName,password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME,""));
+        when(userService.login(userName,password)).thenThrow(new SnsApplicationException(ErrorCode.USER_NOT_FOUND));
 
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -104,7 +104,7 @@ public class UserController {
         String userName = "userName";
         String password = "password";
 
-        when(userService.login(userName,password)).thenReturn("test_token");
+        when(userService.login(userName,password)).thenReturn(String.valueOf(new SnsApplicationException(ErrorCode.INVALID_PASSWORD)));
 
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)

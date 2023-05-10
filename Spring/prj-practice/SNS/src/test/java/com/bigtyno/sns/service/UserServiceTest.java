@@ -42,7 +42,7 @@ class UserServiceTest {
         // mocking
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.empty());
         when(encoder.encode(password)).thenReturn("encrypt_password");
-        when(userEntityRepository.save(any())).thenReturn(UserEntityFixture.get(userName,password));
+        when(userEntityRepository.save(any())).thenReturn(UserEntityFixture.get(userName,password,1));
 
         Assertions.assertDoesNotThrow(()-> userService.join(userName, password));
     }
@@ -53,7 +53,7 @@ class UserServiceTest {
         String userName = "userName";
         String password = "password";
 
-        UserEntity fixture = UserEntityFixture.get(userName,password);
+        UserEntity fixture = UserEntityFixture.get(userName,password,1);
 
         // mocking
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(fixture));
@@ -71,7 +71,7 @@ class UserServiceTest {
         String userName = "userName";
         String password = "password";
 
-        UserEntity fixture = UserEntityFixture.get(userName,password);
+        UserEntity fixture = UserEntityFixture.get(userName,password,1);
 
         // mocking
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(fixture));
@@ -86,7 +86,7 @@ class UserServiceTest {
 
         String userName = "userName";
         String password = "password";
-        UserEntity fixture = UserEntityFixture.get(userName,password);
+        UserEntity fixture = UserEntityFixture.get(userName,password,1);
 
         // mocking
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.empty());
@@ -103,7 +103,7 @@ class UserServiceTest {
         String password = "password";
         String wrongPassword = "wrongPassword";
 
-        UserEntity fixture = UserEntityFixture.get(userName,password);
+        UserEntity fixture = UserEntityFixture.get(userName,password,1);
 
         // mocking
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.empty());

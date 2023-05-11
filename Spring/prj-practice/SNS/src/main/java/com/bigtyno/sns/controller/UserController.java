@@ -1,5 +1,6 @@
 package com.bigtyno.sns.controller;
 
+import com.bigtyno.sns.controller.reponse.AlarmResponse;
 import com.bigtyno.sns.controller.reponse.UserJoinResponse;
 import com.bigtyno.sns.controller.reponse.UserLoginResponse;
 import com.bigtyno.sns.controller.request.Response;
@@ -8,10 +9,10 @@ import com.bigtyno.sns.controller.request.UserLoginRequest;
 import com.bigtyno.sns.model.User;
 import com.bigtyno.sns.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -29,5 +30,10 @@ public class UserController {
     public Response<UserLoginResponse> login(@RequestBody UserLoginRequest request) {
         String token = userService.login(request.getName(), request.getPassword());
         return Response.success(new UserLoginResponse(token));
+    }
+
+    @GetMapping("/alarm")
+    public Response<Page<AlarmResponse>> alarm(Pageable pageable, Authentication authentication) {
+        return Response.success(userService.alarmList(authentication.getName(),pageable).map(AlarmResponse::fromAlarm));
     }
 }

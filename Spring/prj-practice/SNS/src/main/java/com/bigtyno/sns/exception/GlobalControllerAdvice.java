@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalControllerAdvice {
 
-    @ExceptionHandler(SnsApplicationException.class)
-    public ResponseEntity<?> applicationHandler(SnsApplicationException e) {
+    @ExceptionHandler(SimpleSnsApplicationException.class)
+    public ResponseEntity<?> applicationHandler(SimpleSnsApplicationException e) {
         log.error("Error occurs {}", e.toString());
         return ResponseEntity.status(e.getErrorCode().getStatus())
                 .body(Response.error(e.getErrorCode().name()));

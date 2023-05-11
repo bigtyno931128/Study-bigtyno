@@ -33,7 +33,7 @@ public class Post {
         return new Post(
                 entity.getId(),
                 entity.getTitle(),
-                entity.getTitle(),
+                entity.getBody(),
                 User.fromEntity(entity.getUser()),
                 entity.getRegisteredAt(),
                 entity.getUpdatedAt(),

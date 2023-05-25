@@ -64,18 +64,4 @@ public class Bj2744 {
         }
         System.out.println(ans);
     }
-
-//    public static void main(String[] args) throws IOException {
-//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//        String st = br.readLine();
-//        for (int i = 0; i < st.length(); i++) {
-//            // st.charAt(i) 가 대문자 라면 ?
-//            char ch = st.charAt(i);
-//            if ('A' <= ch && ch >= 'Z') {
-//                System.out.print((char) ('a' + ch -'A'));
-//            } else {
-//                System.out.print((char) ('A' + ch- 'a'));
-//            }
-//        }
-//    }
 }

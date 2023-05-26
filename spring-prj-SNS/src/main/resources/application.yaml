@@ -1,0 +1,31 @@
+spring:
+  jpa:
+    database: postgresql
+    hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+  datasource:
+    hikari:
+      maximum-pool-size: 4
+    url: jdbc:postgresql://ec2-52-5-167-89.compute-1.amazonaws.com/d3t19utm1b3dk6
+    username: ztogbtoyptgdih
+    password: 52f92a5d3ef2611902eb508c224c226e3bbb82d6a5b0413b2f0d4cded7226d0d
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      platform: postgres
+  thymeleaf3:
+    decoupled-logic: true
+
+jwt:
+  secret-key: moon-application-2023.secret_key
+  # 30 day
+  token.expired-time-ms: 2592000000
+
+server:
+  port: 8090

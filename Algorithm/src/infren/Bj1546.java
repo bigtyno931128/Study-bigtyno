@@ -2,7 +2,8 @@ package infren;
 
 import java.util.Scanner;
 
-//평균 구하기
+//평균 구하기 https://www.acmicpc.net/problem/1546
+
 public class Bj1546 {
 
 

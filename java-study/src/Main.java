@@ -15,7 +15,7 @@ public class Main {
         System.out.println("alphabet = " + alphabet);
         System.out.println("int _ alphabet = " + (int) alphabet);
 
-        
+
 
     }
 }

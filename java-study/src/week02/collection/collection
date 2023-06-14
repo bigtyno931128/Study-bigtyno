@@ -1,0 +1,8 @@
+Collection 은 기본형 변수가 아닌 참조형 변수를 저장한다 .
+
+자주 쓰는 참조형 변수에는
+
+int 의 참조형 변수 = Integer
+long의 참조현 변수 = Long
+double 의 참조현 변수 = Double
+Stringㅇ 은 원래 부터 참조현 변수

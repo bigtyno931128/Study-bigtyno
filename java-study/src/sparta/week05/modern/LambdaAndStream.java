@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LambdaAndStream {
-    
+
     public static void main(String[] args) {
         ArrayList<Car> carsWantToPark = new ArrayList<>();
         ArrayList<Car> parkingLot = new ArrayList<>();
+
+        // 주말의 경우
+        ArrayList<Car> weekendParkingLot = new ArrayList<>();
+
 
         Car car1 = new Car("Benz", "Class E", true, 0);
         Car car2 = new Car("BMW", "Series 7", false, 100);
@@ -21,9 +25,13 @@ public class LambdaAndStream {
         carsWantToPark.add(car4);
         carsWantToPark.add(car5);
 
-        parkingLot.addAll(parkingCarWithTicket(carsWantToPark));
-        parkingLot.addAll(parkingCarWithMoney(carsWantToPark));
+//        parkingLot.addAll(parkingCarWithTicket(carsWantToPark));
+//        parkingLot.addAll(parkingCarWithMoney(carsWantToPark));
 
+        parkingLot.addAll(parkCars(carsWantToPark, Car :: hasParkingTicket));
+        parkingLot.addAll(parkCars(carsWantToPark, Car :: noTicketButMoney));
+
+        parkingLot.addAll(parkCars(carsWantToPark, (Car car) -> car.hasParkingTicket() && car.getParkingMoney() > 1000));
 
         for (Car car : parkingLot) {
             System.out.println("Parked Car : " + car.getCompany() + "-" + car.getModel());
@@ -31,33 +39,21 @@ public class LambdaAndStream {
 
 
     }
-
-    public static List<Car> parkingCarWithTicket(List<Car> carsWantToPark) {
-        ArrayList<Car> cars = new ArrayList<>();
+    public static List<Car> parkCars(List<Car> carsWantToPark, Predicate<Car> function) {
+        List<Car> cars = new ArrayList<>();
 
         for (Car car : carsWantToPark) {
-            if (car.hasParkingTicket()) {
+            if (function.test(car)) {
                 cars.add(car);
             }
         }
-
         return cars;
     }
 
-    public static List<Car> parkingCarWithMoney(List<Car> carsWantToPark) {
-        ArrayList<Car> cars = new ArrayList<>();
-
-        for (Car car : carsWantToPark) {
-            if (!car.hasParkingTicket() && car.getParkingMoney() > 1000) {
-                cars.add(car);
-            }
-        }
-
-        return cars;
-    }
 }
 
 class Car {
+
     private final String company; // 자동차 회사
     private final String model; // 자동차 모델
 
@@ -86,4 +82,17 @@ class Car {
     public int getParkingMoney() {
         return parkingMoney;
     }
+
+    public static boolean hasTicket (Car car) {
+        return car.hasParkingTicket;
+    }
+
+    public static boolean noTicketButMoney (Car car) {
+        return !car.hasParkingTicket && car.getParkingMoney() > 1000;
+    }
+}
+
+interface Predicate<T> {
+
+    boolean test(T t);
 }

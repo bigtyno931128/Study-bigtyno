@@ -12,12 +12,13 @@ public class LambdaAndStream {
         // 주말의 경우
         ArrayList<Car> weekendParkingLot = new ArrayList<>();
 
-
         Car car1 = new Car("Benz", "Class E", true, 0);
         Car car2 = new Car("BMW", "Series 7", false, 100);
         Car car3 = new Car("BMW", "X9", false, 0);
         Car car4 = new Car("Audi", "A7", true, 0);
         Car car5 = new Car("Hyundai", "Ionic 6", false, 10000);
+
+        
 
         carsWantToPark.add(car1);
         carsWantToPark.add(car2);

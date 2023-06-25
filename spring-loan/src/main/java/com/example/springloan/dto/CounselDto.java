@@ -9,6 +9,7 @@ public class CounselDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
+    @Builder
     public static class Request {
 
         private String name;

@@ -3,10 +3,22 @@ package com.example.springloan.controller;
 import com.example.springloan.dto.ApplicationDTO;
 import com.example.springloan.dto.ApplicationDTO.Request;
 import com.example.springloan.dto.ApplicationDTO.Response;
+import com.example.springloan.dto.FileDTO;
 import com.example.springloan.dto.ResponseDTO;
 import com.example.springloan.service.ApplicationService;
+import com.example.springloan.service.FileStorageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -14,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 public class ApplicationController extends AbstractController {
 
     private final ApplicationService applicationService;
-
+    private final FileStorageService fileStorageService;
     @PostMapping
     public ResponseDTO<Response> create(@RequestBody Request request) {
         return ok(applicationService.create(request));
@@ -40,5 +52,30 @@ public class ApplicationController extends AbstractController {
     @PostMapping("/{applicationId}/terms")
     public ResponseDTO<Boolean> acceptTerms(@PathVariable Long applicationId, @RequestBody ApplicationDTO.AcceptTerms request) {
         return ok(applicationService.acceptTerms(applicationId, request));
+    }
+
+    @PostMapping(value = "/files")
+    public ResponseDTO<Void> upload(MultipartFile file) throws IllegalStateException {
+        fileStorageService.save(file);
+        return ok();
+    }
+
+    @GetMapping("/files")
+    public ResponseEntity<Resource> download(@RequestParam(value="filename") String filename) throws IllegalStateException, IOException {
+        Resource file = fileStorageService.load(filename);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
+    @GetMapping("/files/info")
+    public ResponseDTO<List<FileDTO>> getFileInfos() {
+        List<FileDTO> fileInfos = fileStorageService.loadAll().map(path -> {
+            String fileName = path.getFileName().toString();
+            return FileDTO.builder()
+                    .name(fileName)
+                    .url(MvcUriComponentsBuilder.fromMethodName(ApplicationController.class,"download",fileName).build().toString())
+                    .build();
+        }).collect(Collectors.toList());
+        return ok(fileInfos);
     }
 }

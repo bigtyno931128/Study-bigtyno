@@ -54,22 +54,22 @@ public class ApplicationController extends AbstractController {
         return ok(applicationService.acceptTerms(applicationId, request));
     }
 
-    @PostMapping(value = "/files")
-    public ResponseDTO<Void> upload(MultipartFile file) throws IllegalStateException {
-        fileStorageService.save(file);
+    @PostMapping(value = "/{applicationId}/files")
+    public ResponseDTO<Void> upload(@PathVariable Long applicationId,  MultipartFile file) throws IllegalStateException {
+        fileStorageService.save(applicationId, file);
         return ok();
     }
 
-    @GetMapping("/files")
-    public ResponseEntity<Resource> download(@RequestParam(value="filename") String filename) throws IllegalStateException, IOException {
-        Resource file = fileStorageService.load(filename);
+    @GetMapping("/{applicationId}/files")
+    public ResponseEntity<Resource> download(@PathVariable Long applicationId, @RequestParam(value="filename") String filename) throws IllegalStateException, IOException {
+        Resource file = fileStorageService.load(applicationId, filename);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-    @GetMapping("/files/info")
-    public ResponseDTO<List<FileDTO>> getFileInfos() {
-        List<FileDTO> fileInfos = fileStorageService.loadAll().map(path -> {
+    @GetMapping("/{applicationId}/files/info")
+    public ResponseDTO<List<FileDTO>> getFileInfos(@PathVariable Long applicationId) {
+        List<FileDTO> fileInfos = fileStorageService.loadAll(applicationId).map(path -> {
             String fileName = path.getFileName().toString();
             return FileDTO.builder()
                     .name(fileName)
@@ -77,5 +77,11 @@ public class ApplicationController extends AbstractController {
                     .build();
         }).collect(Collectors.toList());
         return ok(fileInfos);
+    }
+
+    @DeleteMapping("/{applicationId}/files")
+    public ResponseDTO<Void> deleteAll(@PathVariable Long applicationId) {
+        fileStorageService.deleteAll(applicationId);
+        return ok();
     }
 }
